@@ -16,9 +16,9 @@
         }
         .content {
             position: absolute;
-            top: 50%;
+            top: 80%; /* Değişiklik: Yazıyı aşağı taşımak için değeri artırdık */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%); /* Değişiklik: Sadece yatayda ortalamak için */
             text-align: center;
             color: white;
             z-index: 10;
@@ -61,18 +61,15 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // --- DEĞİŞİKLİK BURADA BAŞLIYOR ---
-
         // Parçacıklar (Küre Şeklinde)
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCnt = 20000; // Parçacık sayısını artırdık
+        const particlesCnt = 20000;
         const posArray = new Float32Array(particlesCnt * 3);
-        const radius = 2; // Kürenin yarıçapı
+        const radius = 2;
 
         for (let i = 0; i < particlesCnt * 3; i++) {
-            // Rastgele noktaları bir kürenin yüzeyinde oluşturma mantığı
             const phi = Math.acos(-1 + 2 * Math.random());
-            const theta = Math.sqrt(particlesCnt * Math.PI) * Math.random(); // Fibonacci sphere
+            const theta = Math.sqrt(particlesCnt * Math.PI) * Math.random();
             
             const x = radius * Math.cos(theta) * Math.sin(phi);
             const y = radius * Math.sin(theta) * Math.sin(phi);
@@ -85,14 +82,11 @@
 
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.015, // Parçacık boyutunu ayarladık
+            size: 0.015,
             color: 0xffffff
         });
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
-
-        // --- DEĞİŞİKLİK BURADA BİTİYOR ---
-
 
         // Işık
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -113,10 +107,8 @@
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Kürenin kendi etrafında yavaşça dönmesi
             particlesMesh.rotation.y = .1 * elapsedTime;
             
-            // Kürenin fareyi takip etmesi
             particlesMesh.rotation.y += .5 * (mouseX / window.innerWidth * 2 - 1 - particlesMesh.rotation.y);
             particlesMesh.rotation.x += .5 * (-(mouseY / window.innerHeight * 2 - 1) - particlesMesh.rotation.x);
 
